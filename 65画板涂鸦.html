@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			.list{
+				position: fixed;
+				top: 100px;
+				left: 100px;
+				list-style: none;
+				width: 80px;
+				text-align: center;
+				background: white;
+				display: none;
+				z-index: 99;
+			}
+			.list li{
+				border: solid 1px black;
+				margin-top: -1px;
+				line-height: 30px;
+			}
+			.list li:hover{
+				background: #ccc;
+				color: red;
+				cursor: pointer;
+			}
+			.active{
+				position: fixed;
+				top: 0px;
+				left: 0px;
+				width: 10px;
+				height: 10px;
+				background: black;
+				border-radius: 100%;
+			}
+			.zhe{
+				position: fixed;
+				width: 100%;
+				height: 100vh;
+				top: 0px;
+				left: 0px;
+				background: rgba(0,0,0,0);
+				display: none;
+				z-index: 10;
+			}
+		</style>
+		<script type="text/javascript">
+			document.addEventListener("DOMContentLoaded",function(){
+				var obox = document.querySelector(".obox");
+				var list = document.querySelector(".list");
+				var zhe = document.querySelector(".zhe");
+				var oli = list.querySelectorAll("li");
+				var obj = {
+					w:10,
+					h:10,
+					bg:'black'
+				};
+				document.onmousedown = function(e){
+					var e = e||event;
+					list.style.display = "none";
+					if(e.button==0){
+						//鼠标轨迹
+						document.onmousemove = function(e){
+							var e = e||event;
+							var box = document.createElement("div");
+							box.classList="active";
+							box.style.top = e.clientY+"px";
+							box.style.left = e.clientX+"px";
+							box.style.width = obj.w+"px";
+							box.style.height = obj.h+"px";
+							box.style.background = obj.bg;
+							obox.appendChild(box);
+						}
+						document.onmouseup = function(){
+							document.onmousemove=null;
+						}
+					}
+				}
+				//右键菜单
+				window.oncontextmenu = function(e){
+					var e = e||event;
+					list.style.top = e.clientY+"px";
+					list.style.left = e.clientX+"px";
+					list.style.display = "block";
+					zhe.style.display = "block";
+					return false;
+				}
+				zhe.onmousedown = function(e){
+					var oEvent =e||event;
+					oEvent.cancelBubble = true;
+					oEvent.stopPropagation();
+					list.style.display = "none";
+					zhe.style.display = "none";
+				}
+				for(var i=0;i<oli.length;i++){
+					oli[i].onmousedown = function(e){
+						var oEvent =e||event;
+						oEvent.cancelBubble = true;
+						oEvent.stopPropagation();
+						if(oEvent.button==0){
+							if(this.innerHTML=="清空画板"){
+								obox.innerHTML = "";
+								
+							}
+							if(this.innerHTML=="小号笔"){
+								obj.w=10;
+								obj.h=10;	
+							}
+							if(this.innerHTML=="中号笔"){
+								obj.w=15;
+								obj.h=15;
+							}
+							if(this.innerHTML=="大号笔"){
+								obj.w=20;
+								obj.h=20;
+							}
+							if(this.innerHTML=="橡皮擦"){
+								obj.bg="white";
+							}
+							if(this.innerHTML=="黑色笔"){
+								obj.bg="black";
+							}
+							if(this.innerHTML=="红色笔"){
+								obj.bg="red";
+							}
+							if(this.innerHTML=="绿色笔"){
+								obj.bg="green";
+							}
+							if(this.innerHTML=="金色笔"){
+								obj.bg="gold";
+							}
+							list.style.display = "none";
+							zhe.style.display = "none";
+						}
+					}
+				}
+			})
+		</script>
+	</head>
+	<body>
+		<ul class="list">
+			<li>清空画板</li>
+			<li>橡皮擦</li>
+			<li>小号笔</li>
+			<li>中号笔</li>
+			<li>大号笔</li>
+			<li>黑色笔</li>
+			<li>红色笔</li>
+			<li>绿色笔</li>
+			<li>金色笔</li>
+		</ul>
+		<div class="zhe"></div>
+		<div class="obox"></div>
+	</body>
+</html>
